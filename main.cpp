@@ -80,5 +80,18 @@ struct Inventory
         Inventory()  { cars.reserve(MAX_CARS);  }
         auto add(const Car& car)  {cars.emplace_back(car); }
         auto remove(CarPtr acar) {car.erase(acar); }
-        auto search
-)
+        auto search(const SearchPredicates& pred) -> CarPtr
+        {
+                auto acar = std::find if(cars.begin(), cars.end(), pred);
+                if (acar != cars.end()) {return acar;}
+                return {};
+        }
+
+        auto list()
+        {
+                std::printf("%32s%64s%16s%8s\n",  "Automobile" "Model Name", "Price(USD)",  "Qty.");
+                std::for_each(cars.begin(), cars.end(), [](const auto& Car) {
+                        std::printf("%32s%64s%16.2f%8d\n")
+                        
+                }
+        }
