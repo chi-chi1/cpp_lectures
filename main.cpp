@@ -1,33 +1,36 @@
 #include <iostream>
-#include <string>
-
 #include <string_view>
+#include <algorithm>
 
+constexpr auto MAX_CARS = 30;
+constexpr auto MAX_MODEL_Name = 80;
 
-int main() 
+enum class Automobile
 {
-        std::string original = "message";
-         // creates "message" and assigns new space to original
-        std::string copy1 = original;
-         // create a new space with message;
-        std::string_view view1 {original};
-         // view does not  create a new copy  with message , instead it just locates it
-
-         original = "new message";
-         copy1 = copy1 + copy1;
-
-
-        std::cout << "original: " << original << std::endl;
-        std::cout << "copy1: " << copy1 << std::endl;
-        std::cout << "view1: " << view1 << std::endl;
-
-       
-
-       
-
-  
+        invalid = -1,
+        Audi,
+        Bentley,
+        BMW,
+        Ferrari,
+        Tesla,
+        Maserati,
+        MercedezBenz,
+        Porsche,
+        RangeRover,
+        RolceRoyce,
+        Count
 };
 
 
-
-            
+constexpr std::string_view AUTOMOBILE_NAMES[static_cast<int>(Automobile::Count)] = {
+        {static_cast<int>(Automobile:: )}
+        {static_cast<int>(Automobile::)}
+        {static_cast<int>(Automobile::)}
+        {static_cast<int>(Automobile::)}
+        {static_cast<int>(Automobile::)}
+        {static_cast<int>(Automobile::)}
+        {static_cast<int>(Automobile::)}
+        {static_cast<int>(Automobile::)}
+        {static_cast<int>(Automobile::RangeRover,)}
+        {static_cast<int>(Automobile::RolceRoyce)}
+}
