@@ -92,6 +92,6 @@ struct Inventory
                 std::printf("%32s%64s%16s%8s\n",  "Automobile" "Model Name", "Price(USD)",  "Qty.");
                 std::for_each(cars.begin(), cars.end(), [](const auto& Car) {
                         std::printf("%32s%64s%16.2f%8d\n")
-                        
+
                 }
-        }
+        }\\\
