@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <iostream>
 #include <ios>
+#include <optional>
+#include <string>
 #include <string_view>
 #include <algorithm>
 #include <vector>
@@ -61,11 +63,12 @@ struct Car
         std::string   name;
         float         price;
         int           stock;
+        std::string   colour;
 
         Car()   = default;
 
         Car(const Automobile autom, const std::string& name, const float price, const int stock) :
-                  id {autom}, name {}, price{price}, stock{stock}
+                  id {autom}, name {name}, price{price}, stock{stock}, const std::string& colour
         {}        
 };
 
@@ -84,14 +87,71 @@ struct Inventory
         {
                 auto acar = std::find if(cars.begin(), cars.end(), pred);
                 if (acar != cars.end()) {return acar;}
-                return {};
+                return {};d
         }
 
         auto list()
         {
-                std::printf("%32s%64s%16s%8s\n",  "Automobile" "Model Name", "Price(USD)",  "Qty.");
+                std::printf("%32s%64s%16s%8s%16s\n",  "Automobile" "Model Name", "Price(USD)",  "Qty", "color.");
                 std::for_each(cars.begin(), cars.end(), [](const auto& Car) {
-                        std::printf("%32s%64s%16.2f%8d\n")
+                        std::printf("%32s%64s%16.2f%8d%16s\n",
+get_automobile_name(car.id).data(), car.name.c_str(), car.price, car.stock);
+                });
+                std::printf("------------------------/n");
+        }
+};
 
+struct InventoryUI
+{
+        enum class Option
+        {
+                invalid =-1,
+                AddCar                     ='a',
+                RemoveCar                  ='r',
+                EditCar                    ='e',
+                SearchAutomobile           ='s',
+                ListCars                   ='p',
+                Quit                       ='q',
+        };
+
+        Inventory inventory;
+
+        auto         user_input_handler()  {}
+        auto         list_options()
+        {
+                std::printf("(%c)  Add Car/n", static_cast<char> (Option::AddCar));
+                std::printf("(%c)  Search Car/n", static_cast<char> (Option::SearchCar));
+                std::printf("(%c)  List Automobile/n", static_cast<char> (Option::ListAutomobiles));
+                std::printf("(%c)  List Cars in stock/n", static_cast<char> (Option::ListCars));
+                std::printf("(%c)  Quit/n", static_cast<char> (Option::Quit));
+        }
+        auto get_user_action()
+        {
+                char opt{};
+                std::printf("select operation:  ");
+                std::scanf(" %c, &opt");
+                return opt;
+        }
+        auto handle_add_option()
+        {
+                Car car;
+                do{
+                        list_automobiles();
+
+                        std::printf("Select automobile category to add: ");
+                        int aid {};
+                        std::scanf("%d", &car.id);
+
+                        if (!is_valid_product(car.id)) {std::printf("invalid option select. try again.\n"); }
+                        else
+                        {
+                                std::printf("Enter model name:   ");
+                                std::getline(std::cin >> std::ws,  car.name);
+
+                                std::printf("enter price: ");
+                                
+                        
+                        }
                 }
-        }\\\
+        }
+
