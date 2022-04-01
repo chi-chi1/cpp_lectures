@@ -191,7 +191,58 @@ struct InventoryUI
                 }
                 if (acar != Inventory::CarPtr {})
                 {
-                        std::printf("()")
-                }
+                        std::printf("(%c) Remove Car\n" static_cast<char> (Option::EditCar));
+                        std::printf("(%c) Quit\n" static_cast<char> (Option::Quit));
+                        if (opt == static_cast<char>(Option::RemoveItem))
+                        {
+                                inventory.remove(acar);
+                                break;
+                        }
+                        else if (opt == static_cast<char>(Option::EditCar))
+                        {
+                                const auto new_car = handle_add_option();
+                                inventory.remove(acar);
+                                inventory.add(item);
+                                break;
+                        }
+                        else if (opt == static_cast<char>(Option::Quit)) { break; }
+                        else { std::printf("Invalid option selected. Please try again.\n"); }
+                } while (true) ;       
         }
+        else { std::printf("Item not found. Try adding an item.\n"); }
+
+    auto run()
+    {
+            std::printf("Showroom Inventory v0.1\n");
+            do{
+                    list_options();
+                    const auto opt = get_user_action();
+                    if (opt == static_cast<char> (Option::AddItem))
+                    {
+                            const auto car = handle_add_Option();
+                            inventory.add(car);
+                            std::printf("Added car\n\n");
+
+                    }
+                    else if (opt == static_cast<char>(Option::SearchCar)) { handle_search_option(); }
+                    else if (opt == static_cast<char>(Option::ListAutomobiles)) { List_Automobiles(); }
+                    else if (opt == static_cast<char>(Option::ListCars)) {(inventory.list) (); }
+                    else if (opt == static_cast<char>(Option::Quit)) { break;(); }
+                    else {std::printf("Invalid option selected. Please try again.\n"); }
+
+                    
+
+            }
+            
+
+    } while (true);
+
+
+auto main() -> int
+{
+        InventoryUI ui {};
+
+        ui.run();
+}
+    
 
