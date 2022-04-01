@@ -149,9 +149,49 @@ struct InventoryUI
                                 std::getline(std::cin >> std::ws,  car.name);
 
                                 std::printf("enter price: ");
-                                
-                        
+                                std::cin >> car.price;
+
+                                std::printf("Enter quantity:  ");
+                                std::cin >> car.stock;
+
+                                return car;
                         }
+                }while (true);
+        }
+
+        auto handle_search_option
+        {
+                char opt {};
+                std::printf("Search by (n) Name, (a) automobile Category: ");
+                std::cin >> opt;
+
+                Inventory::CarPtr acar;
+
+                if (opt == 'n' )
+                {
+                        std::string name {};
+                        std::printf("Enter model name: ");
+                        std::getline(std::cin >> std::ws, name);
+                        acar = Inventory.std::search([&] (const Car& car) { return car.name == name; });
+                }
+                else if (opt == 'a')
+                {
+                        Automobile autom {Automobile};
+                        list_automobiles();
+                        std::printf("select automobile id: ");
+                        std::scanf("%d",  &autom);
+
+                        acar = inventory.search([&](const Car& car) { return car.id == autom; });
+
+                }
+                else
+                {
+                        std::printf("invalid option selected. please try again.\n");
+                        return;
+                }
+                if (acar != Inventory::CarPtr {})
+                {
+                        std::printf("()")
                 }
         }
 
