@@ -1,17 +1,15 @@
-#include <iostream>
-#include <ios>
-#include <optional>
-//#include <string>
-//#include <string_view>
 #include <algorithm>
+#include <ios>
+#include <iostream>
+#include <optional>
 #include <vector>
 
 constexpr auto MAX_CARS = 30;
-constexpr auto MAX_MODEL_Name = 80;
+constexpr auto MAX_MODEL_Name = 64;
 
 enum class Automobile
 {
-        invalid = -1,
+        Invalid = -1,
         Audi,
         Bentley,
         BMW,
@@ -39,11 +37,11 @@ constexpr std::string_view AUTOMOBILE_NAMES[static_cast<int>(Automobile::Count)]
         [static_cast<int>(Automobile::RolceRoyce)]           = "RolceRoyce",
 };
 
-constexpr auto is_Valid_automobile(Automobile autom) { return autom > Automobile::invalid && autom < Automobile::Count; }
+constexpr auto is_valid_automobile(Automobile autom) { return autom > Automobile::Invalid && autom < Automobile::Count; }
 
 constexpr auto get_automobile_name(Automobile autom)
 {
-        if (!is_Valid_automobile(autom)) { return std::string_view {""};  }
+        if (!is_valid_automobile(autom)) { return std::string_view {""};  }
 
         return AUTOMOBILE_NAMES[static_cast<int>(autom)];
 }
@@ -51,8 +49,8 @@ constexpr auto get_automobile_name(Automobile autom)
 auto list_automobiles()
 {
         std::cout << "Automobile list: \n";
-        std::for_each_n(std::begin(AUTOMOBILE_NAMES),  std::size(AUTOMOBILE_NAMES), [i: int = 0] (const auto& name) mutable{
-                std::printf("(%d) %s/n", i, name.data());
+        std::for_each_n(std::begin(AUTOMOBILE_NAMES), std::size(AUTOMOBILE_NAMES), [i = 0](const auto& name) mutable {
+                std::printf("(%d) %s\n", i, name.data());
                 i++;
         });
         std::printf("-----------------------------\n");
@@ -64,7 +62,6 @@ struct Car
         std::string   name;
         float         price;
         int           nstock;
-        //std::string   colour;
 
         Car()   = default;
 
@@ -83,11 +80,11 @@ struct Inventory
 
         Inventory()  { cars.reserve(MAX_CARS);  }
         auto add(const Car& car)  {cars.emplace_back(car); }
-        auto remove(CarPtr acar) {cars.erase(acar); }
+        auto remove(CarPtr pcar) {cars.erase(pcar); }
         auto search(const SearchPredicate& pred) -> CarPtr
         {
-                auto acar = std::find_if(cars.begin(), cars.end(), pred);
-                if (acar != cars.end()) { return acar; }
+                auto pcar = std::find_if(cars.begin(), cars.end(), pred);
+                if (pcar != cars.end()) { return pcar; }
                 return {};
         }
 
@@ -105,7 +102,7 @@ struct InventoryUI
 {
         enum class Option
         {
-                invalid                    =-1,
+                Invalid                    =-1,
                 AddCar                     ='a',
                 RemoveCar                  ='r',
                 EditCar                    ='e',
@@ -124,7 +121,7 @@ struct InventoryUI
                 std::printf("(%c)  Add Car\n", static_cast<char> (Option::AddCar));
                 std::printf("(%c)  Search Car\n", static_cast<char> (Option::SearchCar));
                 std::printf("(%c)  List Automobile Categories\n", static_cast<char>(Option::ListAutomobiles));
-                std::printf("(%c)  List Cars in stock\n", static_cast<char> (Option::ListCars));
+                std::printf("(%c)  List Cars in stock\n", static_cast<char>(Option::ListCars));
                 std::printf("(%c)  Quit\n", static_cast<char>(Option::Quit));
         }
         auto get_user_action()
@@ -137,20 +134,20 @@ struct InventoryUI
         auto handle_add_option()
         {
                 Car car;
-                do{
+                do {
                         list_automobiles();
 
                         std::printf("Select automobile category to add: ");
-                        int aid {};
+                        int pid {};
                         std::scanf("%d", &car.id);
 
-                        if (!is_valid_product(car.id)) { std::printf("invalid option selected. Try again.\n"); }
+                        if (!is_valid_automobile(car.id)) { std::printf("Invalid option selected. Try again.\n"); }
                         else
                         {
                                 std::printf("Enter model name:   ");
                                 std::getline(std::cin >> std::ws,  car.name);
 
-                                std::printf("enter price: ");
+                                std::printf("Enter price: ");
                                 std::cin >> car.price;
 
                                 std::printf("Enter quantity:  ");
@@ -158,32 +155,32 @@ struct InventoryUI
 
                                 return car;
                         }
-                }while (true);
+                } while (true);
         }
 
         auto handle_search_option()
         {
                 char opt {};
-                std::printf("Search by (n) Name, (a) automobile Category: ");
+                std::printf("Search by (n) Name, (a) Automobile Category: ");
                 std::cin >> opt;
 
-                Inventory::CarPtr acar;
+                Inventory::CarPtr pcar;
 
                 if (opt == 'n' )
                 {
                         std::string name {};
                         std::printf("Enter model name: ");
                         std::getline(std::cin >> std::ws, name);
-                        acar = inventory.std::search([&] (const Car& car) { return car.name == name; });
+                        pcar = inventory.search([&](const Car& car) { return car.name == name; });
                 }
                 else if (opt == 'a')
                 {
-                        Automobile autom {Automobile::invalid};
+                        Automobile autom {Automobile::Invalid};
                         list_automobiles();
                         std::printf("select automobile id: ");
                         std::scanf("%d",  &autom);
 
-                        acar = inventory.search([&](const Car& car) { return car.id == autom; });
+                        pcar = inventory.search([&](const Car& car) { return car.id == autom; });
 
                 }
                 else
@@ -191,7 +188,7 @@ struct InventoryUI
                         std::printf("Invalid option selected. please try again.\n");
                         return;
                 }
-                if (acar != Inventory::CarPtr {})
+                if (pcar != Inventory::CarPtr {})
                 {
                         do{
                                 std::printf("(%c) Remove Car\n", static_cast<char>(Option::RemoveCar));
@@ -200,22 +197,23 @@ struct InventoryUI
 
                                 if (opt == static_cast<char>(Option::RemoveCar))
                                 {
-                                        inventory.remove(acar);
+                                        inventory.remove(pcar);
                                         break;
                                 }
                                 else if (opt == static_cast<char>(Option::EditCar))
                                 {
                                         const auto new_car = handle_add_option();
-                                        inventory.remove(acar);
+                                        inventory.remove(pcar);
                                         inventory.add(new_car);
                                         break;
                                 }
                                 else if (opt == static_cast<char>(Option::Quit)) { break; }
                                 else { std::printf("Invalid option selected. Please try again.\n"); }
-                        }while (true) ; 
+                        }while (true); 
                 }  
-                else { std::printf("Item not found. Try adding an item.\n"); }      
+                else { std::printf("Car not found. Try adding an item.\n"); }      
         }
+
         auto run()
         {
                 std::printf("Showroom Inventory v0.1\n");
@@ -231,8 +229,8 @@ struct InventoryUI
                          }
                          else if (opt == static_cast<char>(Option::SearchCar)) { handle_search_option(); }
                          else if (opt == static_cast<char>(Option::ListAutomobiles)) { list_automobiles(); }
-                         else if (opt == static_cast<char>(Option::ListCars)) {(inventory.list) (); }
-                         else if (opt == static_cast<char>(Option::Quit)) { break;(); }
+                         else if (opt == static_cast<char>(Option::ListCars)) { inventory.list(); }
+                         else if (opt == static_cast<char>(Option::Quit)) { break; }
                          else {std::printf("Invalid option selected. Please try again.\n"); }      
                 }while (true);
         }
